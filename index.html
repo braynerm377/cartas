@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fbe3ef">
+<meta name="description" content="Una carta bíblica nueva cada día (RVR1960) con una reflexión para tu corazón.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%8C%3C/text%3E%3C/svg%3E">
+<title>Cartas de Dios</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Dancing+Script:wght@600&family=Quicksand:wght@500;600;700&display=swap">
+<style>
+/* Una carta personal: papel claro, borde dorado, rosa pastel y lavanda.
+   Layout: una columna de móvil con navegación inferior; la carta es el centro. */
+:root {
+  --bg-1: #fff7fb; --bg-2: #fcebf5; --bg-3: #f0eafc;
+  --paper: #fffdfb; --paper-edge: #f1d9e6;
+  --glass: rgba(255,255,255,.72);
+  --ink: #4a2f48; --ink-soft: #77607a;
+  --gold: #9a7428; --gold-soft: #e6d09b;
+  --rose: #eaa6c4; --lilac: #bba4e8;
+  --btn-bg: linear-gradient(90deg,#f6b3d0,#cdb9f0); --btn-ink: #3f2440;
+  --font-display: "Dancing Script", "Segoe Script", "Brush Script MT", cursive;
+  --font-verse: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  --font-body: "Quicksand", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg-1: #1b1424; --bg-2: #241a31; --bg-3: #2b2142;
+    --paper: #2a2036; --paper-edge: #46345c;
+    --glass: rgba(42,32,54,.78);
+    --ink: #f7ebf4; --ink-soft: #cbb6c8;
+    --gold: #e3c47f; --gold-soft: #8c7440;
+    --rose: #d68db0; --lilac: #9d86d8;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg-1: #1b1424; --bg-2: #241a31; --bg-3: #2b2142;
+  --paper: #2a2036; --paper-edge: #46345c;
+  --glass: rgba(42,32,54,.78);
+  --ink: #f7ebf4; --ink-soft: #cbb6c8;
+  --gold: #e3c47f; --gold-soft: #8c7440;
+  --rose: #d68db0; --lilac: #9d86d8;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--ink);
+  background: linear-gradient(160deg, var(--bg-1), var(--bg-2) 50%, var(--bg-3)) fixed;
+  background-color: var(--bg-2);
+  padding-block: 16px 120px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 12px; }
+.wrap { max-width: 448px; margin-inline: auto; min-width: 0; }
+
+/* Fondo suave */
+.bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.bg i { position: absolute; border-radius: 50%; filter: blur(60px); animation: drift 22s ease-in-out infinite; }
+.bg i:nth-child(1) { width: 280px; height: 280px; left: -90px; top: -90px; background: color-mix(in srgb, var(--rose) 45%, transparent); }
+.bg i:nth-child(2) { width: 320px; height: 320px; right: -120px; top: 34%; background: color-mix(in srgb, var(--lilac) 40%, transparent); animation-direction: reverse; }
+.bg i:nth-child(3) { width: 260px; height: 260px; left: 20%; bottom: -100px; background: color-mix(in srgb, var(--gold-soft) 35%, transparent); }
+@keyframes drift { 50% { transform: translate(24px, 30px) scale(1.07); } }
+
+/* Cabecera */
+header.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+header.top h1 { margin: 0; font: 600 2rem/1 var(--font-display); }
+header.top p { margin: 6px 0 0; font-size: .78rem; font-weight: 600; letter-spacing: .03em; color: var(--ink-soft); }
+.icon-btn {
+  width: 44px; height: 44px; display: grid; place-items: center; flex: none;
+  border: 1px solid var(--paper-edge); border-radius: 50%;
+  background: var(--glass); color: var(--ink-soft); backdrop-filter: blur(8px);
+  transition: transform .15s;
+}
+.icon-btn:active { transform: scale(.9); }
+.icon-btn svg { width: 21px; height: 21px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+main { padding-top: 24px; min-height: 60dvh; }
+.view[hidden] { display: none; }
+.view { animation: fade .4s ease both; }
+@keyframes fade { from { opacity: 0; transform: translateY(8px); } }
+
+h2.title { margin: 0; text-align: center; font: 600 2.3rem/1.1 var(--font-display); text-wrap: balance; }
+p.lead { margin: 6px 0 20px; text-align: center; font-size: .88rem; line-height: 1.5; color: var(--ink-soft); text-wrap: balance; }
+
+/* Carta */
+.letter {
+  position: relative; overflow: hidden;
+  padding: 32px 28px 28px;
+  border: 1px solid var(--paper-edge); border-radius: 28px;
+  background: radial-gradient(120% 60% at 50% 0%, color-mix(in srgb, var(--rose) 16%, transparent), transparent 70%), var(--paper);
+  box-shadow: 0 24px 48px -22px color-mix(in srgb, var(--lilac) 60%, transparent), 0 8px 18px -10px color-mix(in srgb, var(--rose) 60%, transparent);
+}
+.letter::before { content: ""; position: absolute; inset: 10px; border-radius: 20px; border: 1px solid color-mix(in srgb, var(--gold) 50%, transparent); pointer-events: none; }
+.letter.enter { animation: letter-in .9s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes letter-in {
+  0% { opacity: 0; transform: translateY(44px) scale(.93) rotate(-1.5deg); filter: blur(6px); }
+  60% { opacity: 1; filter: blur(0); }
+  100% { transform: none; }
+}
+.letter > * { position: relative; }
+.letter .meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: .72rem; font-weight: 700; color: var(--ink-soft); }
+.chip { padding: 4px 12px; border-radius: 999px; white-space: nowrap; background: color-mix(in srgb, var(--lilac) 22%, transparent); color: var(--ink); }
+.letter .to { margin: 22px 0 0; font: 600 1.65rem/1.2 var(--font-display); color: var(--gold); }
+.letter blockquote { margin: 10px 0 0; font: italic 500 1.65rem/1.34 var(--font-verse); color: var(--ink); text-wrap: pretty; }
+.letter blockquote.m { font-size: 1.4rem; line-height: 1.4; }
+.letter blockquote.l { font-size: 1.2rem; line-height: 1.45; }
+.letter .ref { margin: 14px 0 0; font: 600 1.15rem var(--font-verse); letter-spacing: .02em; color: var(--gold); }
+.letter .ref small { font-size: .82rem; font-weight: 500; opacity: .85; }
+.orn { display: flex; align-items: center; gap: 12px; margin: 22px 0; color: var(--gold); justify-content: center; }
+.orn::before, .orn::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-soft), transparent); }
+.letter h3 { margin: 0; font-size: .68rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); }
+.letter .refl { margin: 8px 0 0; font-size: .98rem; line-height: 1.65; }
+.letter .sign { margin: 22px 0 0; text-align: right; font: 600 1.55rem var(--font-display); color: var(--gold); }
+
+/* Acciones */
+.actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 20px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 46px;
+  padding: 0 20px; border-radius: 999px; font-size: .88rem; font-weight: 700;
+  border: 1px solid var(--paper-edge); background: var(--glass); color: var(--ink);
+  backdrop-filter: blur(8px); transition: transform .15s;
+}
+.btn:active { transform: scale(.95); }
+.btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.btn.primary { border-color: transparent; background: var(--btn-bg); color: var(--btn-ink); box-shadow: 0 8px 18px -8px color-mix(in srgb, var(--rose) 90%, transparent); }
+.btn.wide { width: 100%; justify-content: center; }
+.btn.fav { width: 46px; padding: 0; justify-content: center; }
+.btn.fav[aria-pressed="true"] { color: #d6407f; border-color: #f0a8c6; background: color-mix(in srgb, #f4a6c6 25%, var(--paper)); }
+.btn.fav[aria-pressed="true"] svg { fill: currentColor; animation: pop .45s cubic-bezier(.3,1.6,.5,1); }
+@keyframes pop { from { transform: scale(.6); } }
+.stack { display: grid; gap: 12px; margin-top: 28px; }
+
+/* Sobre */
+.env-wrap { text-align: center; }
+.env-wrap .hello { margin: 0; font: 600 1.9rem var(--font-display); color: var(--gold); }
+.env-btn { display: block; width: 100%; margin-top: 18px; padding: 14% 0 0; border: 0; background: none; }
+.floaty { animation: floaty 6s ease-in-out infinite; }
+@keyframes floaty { 50% { transform: translateY(-10px) rotate(1deg); } }
+.envelope { position: relative; width: 100%; aspect-ratio: 1.42; perspective: 1100px; filter: drop-shadow(0 22px 22px color-mix(in srgb, var(--lilac) 45%, transparent)); }
+.envelope > * { position: absolute; }
+.e-back { inset: 0; border-radius: 20px; background: linear-gradient(150deg,#f6bfd7,#e6a9cc); }
+.e-paper { left: 9%; right: 9%; top: 10%; bottom: 14%; border-radius: 10px; background: var(--paper); z-index: 1; padding: 14% 12% 0; display: flex; flex-direction: column; gap: 8px; transition: transform .8s cubic-bezier(.3,.9,.3,1) .45s; }
+.e-paper i { display: block; height: 5px; border-radius: 4px; background: color-mix(in srgb, var(--gold) 30%, transparent); }
+.e-front { inset: 0; z-index: 2; border-radius: 20px; background: linear-gradient(160deg,#fbd3e4,#f0b4d2); clip-path: polygon(0 0, 50% 56%, 100% 0, 100% 100%, 0 100%); }
+.e-flap { left: 0; right: 0; top: 0; height: 58%; z-index: 3; transform-origin: 50% 0; background: linear-gradient(180deg,#f6bbd5,#ee9fc6); clip-path: polygon(0 0,100% 0,50% 100%); transition: transform .7s cubic-bezier(.5,0,.3,1), z-index 0s linear .35s; }
+.e-seal { left: 50%; top: 52%; z-index: 4; width: 22%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; color: #fff; font-size: 1.6rem; background: radial-gradient(circle at 35% 30%,#f6e2ad,#c9a45c); box-shadow: 0 6px 14px rgba(150,110,40,.35); transform: translate(-50%,-50%); transition: opacity .25s; }
+.envelope.open .e-flap { transform: rotateX(180deg); z-index: 0; }
+.envelope.open .e-paper { transform: translateY(-46%); }
+.envelope.open .e-seal { opacity: 0; }
+.env-hint { margin: 22px 0 0; font-size: .88rem; font-weight: 600; letter-spacing: .03em; color: var(--ink-soft); }
+
+/* Selector de ánimo, listas */
+.moods { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.mood {
+  width: 100%; height: 100%; display: flex; flex-direction: column; align-items: flex-start; gap: 3px;
+  padding: 16px; text-align: left; border: 1px solid var(--paper-edge); border-radius: 24px;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--h) 24%, var(--paper)), var(--paper));
+  box-shadow: 0 10px 22px -14px var(--h); transition: transform .15s;
+}
+.mood:active { transform: scale(.96); }
+.mood .em { font-size: 1.8rem; line-height: 1; }
+.mood b { margin-top: 6px; font-size: 1rem; }
+.mood span.f { font-size: .76rem; line-height: 1.35; color: var(--ink-soft); }
+.list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.row { width: 100%; padding: 16px; text-align: left; border: 1px solid var(--paper-edge); border-radius: 22px; background: var(--glass); backdrop-filter: blur(8px); transition: transform .15s; }
+.row:active { transform: scale(.98); }
+.row .tags { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: .7rem; font-weight: 700; color: var(--ink-soft); }
+.row p { margin: 8px 0 0; font: italic 500 1.08rem/1.35 var(--font-verse); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.row .r { margin: 6px 0 0; font: 600 .9rem var(--font-verse); color: var(--gold); }
+.day { margin: 22px 0 8px; padding-inline: 4px; font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
+.day:first-child { margin-top: 0; }
+.empty { padding: 28px 20px; text-align: center; font-size: .9rem; line-height: 1.55; color: var(--ink-soft); border: 1px solid var(--paper-edge); border-radius: 24px; background: var(--glass); }
+
+/* Navegación inferior */
+nav.bottom { position: fixed; inset-inline: 0; bottom: 0; z-index: 30; padding: 0 max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+nav.bottom ul { list-style: none; margin: 0 auto; padding: 6px; max-width: 448px; display: flex; border: 1px solid var(--paper-edge); border-radius: 999px; background: var(--glass); backdrop-filter: blur(16px); box-shadow: 0 14px 30px -14px color-mix(in srgb, var(--lilac) 70%, transparent); }
+nav.bottom li { flex: 1; min-width: 0; }
+nav.bottom button { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 0; border: 0; border-radius: 999px; background: none; color: var(--ink-soft); font-size: .68rem; font-weight: 700; }
+nav.bottom button svg { width: 21px; height: 21px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+nav.bottom button[aria-current="page"] { background: linear-gradient(135deg, color-mix(in srgb, var(--rose) 50%, var(--paper)), color-mix(in srgb, var(--lilac) 50%, var(--paper))); color: var(--ink); }
+
+/* Hoja modal */
+.sheet-bg { position: fixed; inset: 0; z-index: 50; display: flex; align-items: flex-end; justify-content: center; background: rgba(59,34,57,.45); backdrop-filter: blur(4px); animation: fade .25s both; }
+.sheet-bg[hidden] { display: none; }
+.sheet { width: 100%; max-width: 448px; max-height: 94dvh; overflow-y: auto; padding: 14px 16px calc(24px + env(safe-area-inset-bottom, 0px)); border-radius: 32px 32px 0 0; border: 1px solid var(--paper-edge); background: linear-gradient(180deg, var(--bg-1), var(--bg-3)); animation: sheet .4s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes sheet { from { opacity: 0; transform: translateY(40px); } }
+.sheet .close { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+@media (min-width: 560px) { .sheet-bg { align-items: center; } .sheet { border-radius: 32px; } }
+
+.toast { position: fixed; left: 50%; bottom: calc(96px + env(safe-area-inset-bottom, 0px)); z-index: 70; transform: translateX(-50%); max-width: calc(100% - 32px); padding: 10px 20px; border-radius: 999px; border: 1px solid var(--paper-edge); background: var(--paper); font-size: .86rem; font-weight: 700; box-shadow: 0 10px 24px -10px rgba(0,0,0,.35); animation: pop .35s cubic-bezier(.3,1.6,.5,1) both; }
+.toast[hidden] { display: none; }
+.foot { margin: 28px 0 0; text-align: center; font-size: .72rem; line-height: 1.5; color: var(--ink-soft); }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0s !important; } }
+</style>
+
+</head>
+<body>
+<div class="bg" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Cartas de Dios</h1>
+      <p id="today"></p>
+    </div>
+    <button class="icon-btn" id="theme" type="button" aria-label="Cambiar entre modo claro y oscuro">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>
+    </button>
+  </header>
+
+  <main>
+    <section class="view" id="v-hoy" aria-label="Tu carta de hoy"></section>
+
+    <section class="view" id="v-animo" aria-label="¿Cómo te sientes hoy?" hidden>
+      <h2 class="title">¿Cómo te sientes hoy?</h2>
+      <p class="lead">Elige una emoción y Dios tendrá una palabra para ese momento de tu corazón.</p>
+      <ul class="moods" id="moods"></ul>
+    </section>
+
+    <section class="view" id="v-fav" aria-label="Favoritos" hidden>
+      <h2 class="title">Mis favoritos</h2>
+      <p class="lead">Las palabras que más tocaron tu corazón.</p>
+      <div id="fav-list"></div>
+    </section>
+
+    <section class="view" id="v-hist" aria-label="Cartas recibidas" hidden>
+      <h2 class="title">Tus cartas</h2>
+      <p class="lead">Cada palabra que Dios te ha regalado, guardada para volver a ella.</p>
+      <div id="hist-list"></div>
+    </section>
+
+    <p class="foot">Santa Biblia, Reina-Valera 1960 (RVR1960).<br>Las reflexiones son un acompañamiento; la Palabra de Dios es lo que permanece.</p>
+  </main>
+</div>
+
+<nav class="bottom" aria-label="Navegación principal">
+  <ul>
+    <li><button type="button" data-tab="hoy"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7.5 8 6 8-6"/></svg>Hoy</button></li>
+    <li><button type="button" data-tab="animo"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/></svg>Ánimo</button></li>
+    <li><button type="button" data-tab="fav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.2-9.2C1.6 8 3.4 5 6.5 5c2 0 3.6 1.100 5.500 3.200C13.900 6.100 15.500 5 17.500 5c3.100 0 4.900 3 3.700 6.300-1.700 4.600-9.200 9.200-9.200 9.200Z"/></svg>Favoritos</button></li>
+    <li><button type="button" data-tab="hist"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.500 1.500 0 0 1 5.500 4H11v16H5.500A1.500 1.500 0 0 1 4 18.500v-13ZM20 5.500A1.500 1.500 0 0 0 18.500 4H13v16h5.500a1.500 1.500 0 0 0 1.500-1.500v-13Z"/></svg>Cartas</button></li>
+  </ul>
+</nav>
+
+<div class="sheet-bg" id="sheet-bg" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="Carta">
+    <div class="close"><button class="icon-btn" id="sheet-close" type="button" aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div id="sheet-body"></div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+// Algoritmo de la carta del día. Lo usan la PÁGINA y el CORREO, así que ambos
+// muestran siempre el mismo versículo. Es determinista: depende solo de la fecha.
+//
+// Los días se agrupan en ciclos del tamaño de la base de datos. Cada ciclo es una
+// permutación distinta de TODOS los versículos: ninguno se repite hasta haberlos visto todos.
+// Entre ciclos hay una guarda para que un versículo no reaparezca antes de ~10 días.
+// (No uses imports ni sintaxis especial aquí: el build copia este archivo dentro de la página.)
+
+const pad2 = (n) => String(n).padStart(2, "0");
+
+/** "YYYY-MM-DD" en hora local o en la zona horaria IANA indicada. */
+function dateKeyFor(date, timeZone) {
+  if (!timeZone) return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`;
+  return new Intl.DateTimeFormat("en-CA", { timeZone, year: "numeric", month: "2-digit", day: "2-digit" }).format(date);
+}
+
+function dayNumber(key) {
+  const [y, m, d] = key.split("-").map(Number);
+  return Math.floor(Date.UTC(y, m - 1, d) / 86400000);
+}
+
+function addDays(key, days) {
+  const [y, m, d] = key.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d + days)).toISOString().slice(0, 10);
+}
+
+function hashSeed(n) {
+  let h = (2166136261 ^ n) >>> 0;
+  h = Math.imul(h ^ (h >>> 16), 2246822507);
+  h = Math.imul(h ^ (h >>> 13), 3266489909);
+  return (h ^ (h >>> 16)) >>> 0;
+}
+
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function rawOrder(cycle, n) {
+  const arr = Array.from({ length: n }, (_, i) => i);
+  const rnd = mulberry32(hashSeed(cycle + 1));
+  for (let i = n - 1; i > 0; i--) {
+    const j = Math.floor(rnd() * (i + 1));
+    const tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+  }
+  return arr;
+}
+
+const orderCache = new Map();
+
+function cycleOrder(cycle, n) {
+  const cacheKey = n + ":" + cycle;
+  const cached = orderCache.get(cacheKey);
+  if (cached) return cached;
+  const order = rawOrder(cycle, n);
+  const guard = Math.min(10, Math.floor(n / 4));
+  if (cycle > 0 && guard > 0) {
+    const tail = new Set(cycleOrder(cycle - 1, n).slice(n - guard));
+    for (let i = 0; i < guard; i++) {
+      if (!tail.has(order[i])) continue;
+      for (let j = guard; j < n; j++) {
+        if (!tail.has(order[j])) {
+          const tmp = order[i];
+          order[i] = order[j];
+          order[j] = tmp;
+          break;
+        }
+      }
+    }
+  }
+  orderCache.set(cacheKey, order);
+  return order;
+}
+
+/** El versículo del día para una fecha "YYYY-MM-DD". */
+function getDailyVerse(dateKey, verses) {
+  const sorted = [...verses].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+  const n = sorted.length;
+  const day = dayNumber(dateKey);
+  const cycle = Math.floor(day / n);
+  const index = ((day % n) + n) % n;
+  return sorted[cycleOrder(cycle, n)[index]];
+}
+
+</script>
+<script>
+(function () {
+  "use strict";
+  var VERSES = [{"id":"amor-01","category":"amor","ref":"Juan 3:16","text":"Porque de tal manera amó Dios al mundo, que ha dado a su Hijo unigénito, para que todo aquel que en él cree, no se pierda, mas tenga vida eterna.","reflection":"Antes de que hicieras algo bueno, ya habías sido amada hasta el extremo. Hoy no tienes que ganarte ese amor: solo recibirlo."},{"id":"amor-02","category":"amor","ref":"1 Juan 4:19","text":"Nosotros le amamos a él, porque él nos amó primero.","reflection":"Tu amor por Dios es una respuesta, no un esfuerzo. Él dio el primer paso hacia ti, y sigue dándolo cada mañana."},{"id":"amor-03","category":"amor","ref":"Romanos 8:38-39","text":"Por lo cual estoy seguro de que ni la muerte, ni la vida, ni ángeles, ni principados, ni potestades, ni lo presente, ni lo por venir, ni lo alto, ni lo profundo, ni ninguna otra cosa creada nos podrá separar del amor de Dios, que es en Cristo Jesús Señor nuestro.","reflection":"Nada de lo que viva tu corazón hoy puede ponerte lejos de Él. Ni tus dudas, ni tus errores, ni tus días grises. Estás sostenida."},{"id":"amor-04","category":"amor","ref":"Jeremías 31:3","text":"Jehová se le apareció hace ya mucho tiempo, diciendo: Con amor eterno te he amado; por tanto, te prolongué mi misericordia.","reflection":"Eterno quiere decir que no tiene fecha de vencimiento. Su cariño por ti no depende de cómo te sientas hoy."},{"id":"amor-05","category":"amor","ref":"1 Corintios 13:4","text":"El amor es sufrido, es benigno; el amor no tiene envidia, el amor no es jactancioso, no se envanece;","reflection":"Así es el amor con el que Dios te mira: paciente y tierno. Y es también el amor al que te invita a vivir con quienes te rodean."},{"id":"amor-06","category":"amor","ref":"1 Juan 4:16","text":"Y nosotros hemos conocido y creído el amor que Dios tiene para con nosotros. Dios es amor; y el que permanece en amor, permanece en Dios, y Dios en él.","reflection":"Quedarte en su amor es tan sencillo como volver a Él una y otra vez. Hoy, respira hondo y regresa a casa."},{"id":"amor-07","category":"amor","ref":"Romanos 5:8","text":"Mas Dios muestra su amor para con nosotros, en que siendo aún pecadores, Cristo murió por nosotros.","reflection":"Su amor no esperó a que fueras perfecta. Te eligió tal como eras, y te sigue eligiendo hoy."},{"id":"amor-08","category":"amor","ref":"Sofonías 3:17","text":"Jehová está en medio de ti, poderoso, él salvará; se gozará sobre ti con alegría, callará de amor, se regocijará sobre ti con cánticos.","reflection":"Imagina a Dios cantando de alegría por ti. No te observa con exigencia, sino con una ternura que a veces se queda en silencio de puro amor."},{"id":"amor-09","category":"amor","ref":"1 Juan 3:1","text":"Mirad cuál amor nos ha dado el Padre, para que seamos llamados hijos de Dios; por esto el mundo no nos conoce, porque no le conoció a él.","reflection":"Eres hija. Ese es tu nombre más verdadero, más profundo que cualquier etiqueta que el mundo te haya puesto."},{"id":"felicidad-01","category":"felicidad","ref":"Salmos 16:11","text":"Me mostrarás la senda de la vida; en tu presencia hay plenitud de gozo; delicias a tu diestra para siempre.","reflection":"El gozo más profundo no viene de que todo salga bien, sino de estar cerca de Él. Hoy, disfruta esa cercanía."},{"id":"felicidad-02","category":"felicidad","ref":"Nehemías 8:10","text":"Y les dijo: Id, comed grosuras, y bebed vino dulce, y enviad porciones a los que no tienen nada preparado, porque es día santo a nuestro Señor; no os entristezcáis, porque el gozo de Jehová es vuestra fuerza.","reflection":"Tu alegría no es un lujo: es una fuerza. Celebra, comparte, ríe; Dios se alegra contigo."},{"id":"felicidad-03","category":"felicidad","ref":"Salmos 118:24","text":"Este es el día que hizo Jehová; nos gozaremos y alegraremos en él.","reflection":"Hoy es un regalo con tu nombre. Mira a tu alrededor y encuentra una cosa pequeña por la cual sonreír."},{"id":"felicidad-04","category":"felicidad","ref":"Filipenses 4:4","text":"Regocijaos en el Señor siempre. Otra vez digo: ¡Regocijaos!","reflection":"Hasta Pablo lo repite dos veces, como quien sabe que olvidamos con facilidad. Regocíjate: Dios sigue siendo bueno."},{"id":"felicidad-05","category":"felicidad","ref":"Salmos 126:3","text":"Grandes cosas ha hecho Jehová con nosotros; estaremos alegres.","reflection":"Haz memoria de lo que Dios ya hizo en tu vida. Esa lista es larga y es motivo de una sonrisa de verdad."},{"id":"felicidad-06","category":"felicidad","ref":"Proverbios 17:22","text":"El corazón alegre constituye buen remedio; mas el espíritu triste seca los huesos.","reflection":"La alegría también cura. Regálate hoy un momento de risa, música o un abrazo; es parte de cuidarte."},{"id":"felicidad-07","category":"felicidad","ref":"Juan 15:11","text":"Estas cosas os he hablado, para que mi gozo esté en vosotros, y vuestro gozo sea cumplido.","reflection":"Jesús quiere que tu gozo sea completo, no a medias. Es su deseo para ti, no una carga más."},{"id":"felicidad-08","category":"felicidad","ref":"Salmos 37:4","text":"Deléitate asimismo en Jehová, y él te concederá las peticiones de tu corazón.","reflection":"Cuando disfrutas de Dios, tus deseos se ordenan y se vuelven más bellos. Empieza por deleitarte en Él."},{"id":"felicidad-09","category":"felicidad","ref":"Salmos 30:11","text":"Has cambiado mi lamento en baile; desataste mi cilicio, y me ceñiste de alegría.","reflection":"Dios sabe transformar los lamentos en baile. Si hoy bailas, baila de corazón; si no, espera: Él está en eso."},{"id":"salvacion-01","category":"salvacion","ref":"Efesios 2:8-9","text":"Porque por gracia sois salvos por medio de la fe; y esto no de vosotros, pues es don de Dios; no por obras, para que nadie se gloríe.","reflection":"No te salvaste por portarte bien, y tampoco te perderás por tropezar. Es un regalo, y los regalos solo se reciben."},{"id":"salvacion-02","category":"salvacion","ref":"Romanos 10:9","text":"…que si confesares con tu boca que Jesús es el Señor, y creyeres en tu corazón que Dios le levantó de los muertos, serás salvo.","reflection":"La promesa es sencilla y firme. Descansa hoy en que tu confianza está puesta en quien venció a la muerte."},{"id":"salvacion-03","category":"salvacion","ref":"Juan 14:6","text":"Jesús le dijo: Yo soy el camino, y la verdad, y la vida; nadie viene al Padre, sino por mí.","reflection":"Cuando no sepas qué camino tomar, recuerda que Jesús mismo es el Camino. No tienes que adivinar: puedes seguirlo."},{"id":"salvacion-04","category":"salvacion","ref":"Hechos 4:12","text":"Y en ningún otro hay salvación; porque no hay otro nombre bajo el cielo, dado a los hombres, en que podamos ser salvos.","reflection":"Hay un nombre en el cual descansar con total seguridad. Pronúncialo hoy con gratitud: Jesús."},{"id":"salvacion-05","category":"salvacion","ref":"Romanos 6:23","text":"Porque la paga del pecado es muerte, mas la dádiva de Dios es vida eterna en Cristo Jesús Señor nuestro.","reflection":"Lo que merecíamos fue cambiado por un regalo que no merecíamos. Vive hoy con el corazón ligero de quien fue perdonada."},{"id":"salvacion-06","category":"salvacion","ref":"Isaías 12:2","text":"He aquí Dios es salvación mía; me aseguraré y no temeré, porque mi fortaleza y mi canción es JAH Jehová, quien ha sido salvación para mí.","reflection":"Dios no solo te salva: también se vuelve tu canción. Hoy puedes cantarlo, aunque sea bajito."},{"id":"salvacion-07","category":"salvacion","ref":"Juan 10:10","text":"El ladrón no viene sino para hurtar y matar y destruir; yo he venido para que tengan vida, y para que la tengan en abundancia.","reflection":"Jesús no vino solo a rescatarte, sino a darte una vida plena, con sentido y con color. Hay más de lo que ves."},{"id":"salvacion-08","category":"salvacion","ref":"Lucas 19:10","text":"Porque el Hijo del Hombre vino a buscar y a salvar lo que se había perdido.","reflection":"Él te buscó cuando te sentías perdida, y vuelve a buscarte cada vez que te alejas. Su búsqueda nunca se cansa."},{"id":"salvacion-09","category":"salvacion","ref":"2 Corintios 5:17","text":"De modo que si alguno está en Cristo, nueva criatura es; las cosas viejas pasaron; he aquí todas son hechas nuevas.","reflection":"Tu pasado no te define. En Cristo cada día es una página en blanco y tú eres una criatura nueva."},{"id":"tristeza-01","category":"tristeza","ref":"Salmos 34:18","text":"Cercano está Jehová a los quebrantados de corazón; y salva a los contritos de espíritu.","reflection":"Cuando el corazón duele, Dios no se aleja: se acerca. Aunque no lo sientas, está a tu lado en este momento."},{"id":"tristeza-02","category":"tristeza","ref":"Salmos 30:5","text":"Porque un momento será su ira, pero su favor dura toda la vida. Por la noche durará el lloro, y a la mañana vendrá la alegría.","reflection":"Esta noche no es para siempre. Llora si lo necesitas; la mañana ya viene en camino."},{"id":"tristeza-03","category":"tristeza","ref":"Mateo 5:4","text":"Bienaventurados los que lloran, porque ellos recibirán consolación.","reflection":"Tus lágrimas no son debilidad ni falta de fe. Jesús promete consuelo precisamente a quien llora."},{"id":"tristeza-04","category":"tristeza","ref":"Salmos 147:3","text":"Él sana a los quebrantados de corazón, y venda sus heridas.","reflection":"Dios es un sanador cuidadoso: venda cada herida con paciencia. Déjale ver también las que no cuentas a nadie."},{"id":"tristeza-05","category":"tristeza","ref":"Apocalipsis 21:4","text":"Enjugará Dios toda lágrima de los ojos de ellos; y ya no habrá muerte, ni habrá más llanto, ni clamor, ni dolor; porque las primeras cosas pasaron.","reflection":"Llegará el día en que Dios mismo secará tus lágrimas. Mientras tanto, te acompaña en cada una."},{"id":"tristeza-06","category":"tristeza","ref":"2 Corintios 1:3-4","text":"Bendito sea el Dios y Padre de nuestro Señor Jesucristo, Padre de misericordias y Dios de toda consolación, el cual nos consuela en todas nuestras tribulaciones, para que podamos nosotros consolar a los que están en cualquier tribulación, por medio de la consolación con que nosotros somos consolados por Dios.","reflection":"Él es el Dios de toda consolación. Recíbela hoy, y un día esa misma ternura podrá llegar a otros a través de ti."},{"id":"tristeza-07","category":"tristeza","ref":"Salmos 56:8","text":"Mis huidas tú has contado; pon mis lágrimas en tu redoma; ¿no están ellas en tu libro?","reflection":"Ni una lágrima tuya se pierde. Dios las recoge y las cuenta, porque cada una le importa."},{"id":"tristeza-08","category":"tristeza","ref":"Salmos 126:5","text":"Los que sembraron con lágrimas, con regocijo segarán.","reflection":"Nada de lo que lloras es en vano. Dios convierte las lágrimas sembradas en una cosecha de alegría."},{"id":"tristeza-09","category":"tristeza","ref":"Salmos 23:4","text":"Aunque ande en valle de sombra de muerte, no temeré mal alguno, porque tú estarás conmigo; tu vara y tu cayado me infundirán aliento.","reflection":"Un valle se atraviesa; no es un lugar donde quedarse. Y no lo cruzas sola: Él camina contigo paso a paso."},{"id":"frustracion-01","category":"frustracion","ref":"Gálatas 6:9","text":"No nos cansemos, pues, de hacer bien; porque a su tiempo segaremos, si no desmayamos.","reflection":"Lo que siembras con amor no se pierde. Tal vez aún no veas el fruto, pero su tiempo llegará. Sigue."},{"id":"frustracion-02","category":"frustracion","ref":"Santiago 1:2-3","text":"Hermanos míos, tened por sumo gozo cuando os halléis en diversas pruebas, sabiendo que la prueba de vuestra fe produce paciencia.","reflection":"Lo que hoy te desespera está formando en ti una paciencia que luego agradecerás. No es tiempo perdido."},{"id":"frustracion-03","category":"frustracion","ref":"Romanos 5:3-4","text":"Y no sólo esto, sino que también nos gloriamos en las tribulaciones, sabiendo que la tribulación produce paciencia; y la paciencia, prueba; y la prueba, esperanza;","reflection":"Dios usa los procesos difíciles para construir algo hermoso: paciencia, carácter y esperanza. Confía en la obra que está haciendo en ti."},{"id":"frustracion-04","category":"frustracion","ref":"Hebreos 12:1","text":"Por tanto, nosotros también, teniendo en derredor nuestro tan grande nube de testigos, despojémonos de todo peso y del pecado que nos asedia, y corramos con paciencia la carrera que tenemos por delante,","reflection":"No tienes que correr ligera de equipaje y con prisa, sino con paciencia. Suelta el peso que no te corresponde cargar."},{"id":"frustracion-05","category":"frustracion","ref":"Salmos 37:7","text":"Guarda silencio ante Jehová, y espera en él. No te alteres con motivo del que prospera en su camino, por el hombre que hace maldades.","reflection":"No compares tu proceso con el de nadie. Haz una pausa, respira y espera en Él: tu historia tiene su propio ritmo."},{"id":"frustracion-06","category":"frustracion","ref":"Filipenses 3:13-14","text":"Hermanos, yo mismo no pretendo haberlo ya alcanzado; pero una cosa hago: olvidando ciertamente lo que queda atrás, y extendiéndome a lo que está delante, prosigo a la meta, al premio del supremo llamamiento de Dios en Cristo Jesús.","reflection":"Hasta Pablo se sabía en camino. Suelta lo que quedó atrás, aunque haya sido un tropiezo, y da un paso hacia adelante."},{"id":"frustracion-07","category":"frustracion","ref":"Eclesiastés 3:11","text":"Todo lo hizo hermoso en su tiempo; y ha puesto eternidad en el corazón de ellos, sin que alcance el hombre a entender la obra que ha hecho Dios desde el principio hasta el fin.","reflection":"No todo tiene que encajar hoy. Dios hace todo hermoso a su tiempo, incluso aquello que ahora te confunde."},{"id":"frustracion-08","category":"frustracion","ref":"Santiago 1:4","text":"Mas tenga la paciencia su obra completa, para que seáis perfectos y cabales, sin que os falte cosa alguna.","reflection":"La paciencia también trabaja. Deja que termine su obra en ti; el resultado valdrá cada día de espera."},{"id":"frustracion-09","category":"frustracion","ref":"Salmos 40:1","text":"Pacientemente esperé a Jehová, y se inclinó a mí, y oyó mi clamor.","reflection":"Él se inclina para escucharte. Tu clamor, incluso el más cansado, nunca cae en el vacío."},{"id":"miedo-01","category":"miedo","ref":"Isaías 41:10","text":"No temas, porque yo estoy contigo; no desmayes, porque yo soy tu Dios que te esfuerzo; siempre te ayudaré, siempre te sustentaré con la diestra de mi justicia.","reflection":"Cuatro promesas en un solo versículo: contigo estoy, te esfuerzo, te ayudo y te sustento. Respira: no estás sola con eso que te asusta."},{"id":"miedo-02","category":"miedo","ref":"Josué 1:9","text":"Mira que te mando que te esfuerces y seas valiente; no temas ni desmayes, porque Jehová tu Dios estará contigo en dondequiera que vayas.","reflection":"La valentía no es ausencia de miedo, sino caminar sabiendo que Dios va contigo. Y va a dondequiera que vayas."},{"id":"miedo-03","category":"miedo","ref":"Salmos 27:1","text":"Jehová es mi luz y mi salvación; ¿de quién temeré? Jehová es la fortaleza de mi vida; ¿de quién he de atemorizarme?","reflection":"Con Él como luz, la oscuridad pierde su poder. Enciende esta verdad en tu corazón y mira de nuevo lo que te asusta."},{"id":"miedo-04","category":"miedo","ref":"2 Timoteo 1:7","text":"Porque no nos ha dado Dios espíritu de cobardía, sino de poder, de amor y de dominio propio.","reflection":"El miedo no tiene la última palabra sobre ti. Dentro de ti hay poder, amor y dominio propio, regalos de Dios."},{"id":"miedo-05","category":"miedo","ref":"Salmos 56:3","text":"En el día que temo, yo en ti confío.","reflection":"Hasta el salmista tuvo días de temor. Puedes sentir miedo y confiar al mismo tiempo; son compatibles."},{"id":"miedo-06","category":"miedo","ref":"Deuteronomio 31:6","text":"Esforzaos y cobrad ánimo; no temáis, ni tengáis miedo de ellos, porque Jehová tu Dios es el que va contigo; no te dejará, ni te desamparará.","reflection":"Él no te dejará ni te desamparará. Esa frase puede ser tu ancla cuando todo se sienta incierto."},{"id":"miedo-07","category":"miedo","ref":"Isaías 43:1","text":"Ahora, así dice Jehová, Creador tuyo, oh Jacob, y Formador tuyo, oh Israel: No temas, porque yo te redimí; te puse nombre, mío eres tú.","reflection":"Te conoce por tu nombre y te llama suya. Quien te pertenece a Él está en las mejores manos."},{"id":"miedo-08","category":"miedo","ref":"Salmos 91:4","text":"Con sus plumas te cubrirá, y debajo de sus alas estarás seguro; escudo y adarga es su verdad.","reflection":"Imagina un refugio cálido y seguro bajo sus alas. Puedes esconderte ahí hoy y descansar."},{"id":"miedo-09","category":"miedo","ref":"Salmos 118:6","text":"Jehová está conmigo; no temeré lo que me pueda hacer el hombre.","reflection":"Si Dios está contigo, ninguna opinión ni amenaza puede definir tu valor. Camina con la frente en alto."},{"id":"ansiedad-01","category":"ansiedad","ref":"Filipenses 4:6-7","text":"Por nada estéis afanosos, sino sean conocidas vuestras peticiones delante de Dios en toda oración y ruego, con acción de gracias. Y la paz de Dios, que sobrepasa todo entendimiento, guardará vuestros corazones y vuestros pensamientos en Cristo Jesús.","reflection":"Dile a Dios todo lo que te inquieta, con detalle. Su paz hará guardia sobre tu corazón y tus pensamientos."},{"id":"ansiedad-02","category":"ansiedad","ref":"1 Pedro 5:7","text":"…echando toda vuestra ansiedad sobre él, porque él tiene cuidado de vosotros.","reflection":"Puedes soltar esa carga, no solo dejarla a un lado. Él quiere cargarla, porque tiene cuidado de ti."},{"id":"ansiedad-03","category":"ansiedad","ref":"Mateo 6:34","text":"Así que, no os afanéis por el día de mañana, porque el día de mañana traerá su afán. Basta a cada día su propio mal.","reflection":"Hoy solo tienes que vivir hoy. Mañana tendrá su propia gracia. Vuelve al presente, a este instante."},{"id":"ansiedad-04","category":"ansiedad","ref":"Salmos 55:22","text":"Echa sobre Jehová tu carga, y él te sustentará; no dejará para siempre caído al justo.","reflection":"No es necesario que lo resuelvas todo tú. Entrega tu carga y recibe sustento a cambio."},{"id":"ansiedad-05","category":"ansiedad","ref":"Mateo 11:28","text":"Venid a mí todos los que estáis trabajados y cargados, y yo os haré descansar.","reflection":"Es una invitación muy tierna: ven como estás, cansada y cargada. Él se encarga de darte descanso."},{"id":"ansiedad-06","category":"ansiedad","ref":"Proverbios 3:5-6","text":"Fíate de Jehová de todo tu corazón, y no te apoyes en tu propia prudencia. Reconócelo en todos tus caminos, y él enderezará tus veredas.","reflection":"No tienes que entenderlo todo para seguir caminando. Confía, y Él irá enderezando lo que hoy ves torcido."},{"id":"ansiedad-07","category":"ansiedad","ref":"Salmos 94:19","text":"En la multitud de mis pensamientos dentro de mí, tus consolaciones alegraban mi alma.","reflection":"Cuando tu mente corre sin parar, su consuelo llega como un respiro. Pídele que calme tus pensamientos."},{"id":"ansiedad-08","category":"ansiedad","ref":"Mateo 6:26","text":"Mirad las aves del cielo, que no siembran, ni siegan, ni recogen en graneros; y vuestro Padre celestial las alimenta. ¿No valéis vosotros mucho más que ellas?","reflection":"Mira por la ventana y observa a las aves. Si el Padre cuida de ellas, cuánto más de ti, que eres su hija."},{"id":"ansiedad-09","category":"ansiedad","ref":"Isaías 26:3","text":"Tú guardarás en completa paz a aquel cuyo pensamiento en ti persevera; porque en ti ha confiado.","reflection":"La paz completa nace de dirigir tus pensamientos hacia Él una y otra vez. Hoy, vuelve a Él tantas veces como haga falta."},{"id":"esperanza-01","category":"esperanza","ref":"Jeremías 29:11","text":"Porque yo sé los pensamientos que tengo acerca de vosotros, dice Jehová, pensamientos de paz, y no de mal, para daros el fin que esperáis.","reflection":"Dios tiene planes de paz para ti. Aunque hoy no veas el camino completo, tu futuro está en manos buenas."},{"id":"esperanza-02","category":"esperanza","ref":"Romanos 15:13","text":"Y el Dios de esperanza os llene de todo gozo y paz en el creer, para que abundéis en esperanza por el poder del Espíritu Santo.","reflection":"La esperanza es un regalo del Espíritu. Pídele que te llene hasta desbordar, aunque hoy te sientas vacía."},{"id":"esperanza-03","category":"esperanza","ref":"Romanos 8:28","text":"Y sabemos que a los que aman a Dios, todas las cosas les ayudan a bien, esto es, a los que conforme a su propósito son llamados.","reflection":"Incluso lo que hoy no entiendes está siendo tejido para tu bien. Dios no desperdicia nada en la vida de quien lo ama."},{"id":"esperanza-04","category":"esperanza","ref":"Lamentaciones 3:22-23","text":"Por la misericordia de Jehová no hemos sido consumidos, porque nunca decayeron sus misericordias. Nuevas son cada mañana; grande es tu fidelidad.","reflection":"Cada mañana trae misericordia recién estrenada. Hoy no tienes que cargar con la de ayer: tienes una nueva."},{"id":"esperanza-05","category":"esperanza","ref":"Isaías 40:31","text":"…pero los que esperan a Jehová tendrán nuevas fuerzas; levantarán alas como las águilas; correrán, y no se cansarán; caminarán, y no se fatigarán.","reflection":"Esperar en Dios no es quedarse quieta sin hacer nada: es renovarse. Tus alas están en camino."},{"id":"esperanza-06","category":"esperanza","ref":"Salmos 42:11","text":"¿Por qué te abates, oh alma mía, y te turbas dentro de mí? Espera en Dios; porque aún he de alabarle, salvación mía y Dios mío.","reflection":"Háblale a tu propia alma con ternura y recuérdale: aún alabarás. La esperanza también se aprende a decir en voz alta."},{"id":"esperanza-07","category":"esperanza","ref":"Isaías 43:19","text":"He aquí que yo hago cosa nueva; pronto saldrá a luz; ¿no la conoceréis? Otra vez abriré camino en el desierto, y ríos en la soledad.","reflection":"Dios abre caminos donde no hay ninguno. Mira con atención: tal vez ya empezó algo nuevo."},{"id":"esperanza-08","category":"esperanza","ref":"Proverbios 23:18","text":"Porque ciertamente hay fin, y tu esperanza no será cortada.","reflection":"Lo que esperas de parte de Dios no se perderá. Hay un buen final, y tu esperanza sigue en pie."},{"id":"esperanza-09","category":"esperanza","ref":"Salmos 71:14","text":"Mas yo esperaré siempre, y te alabaré más y más.","reflection":"Elige esperar siempre, incluso cuando se alarga. Cada día de espera puede ser también un día de alabanza."},{"id":"fortaleza-01","category":"fortaleza","ref":"Filipenses 4:13","text":"Todo lo puedo en Cristo que me fortalece.","reflection":"No lo puedes todo sola, y no tienes que hacerlo. Lo puedes todo en Él. Hoy, apóyate en su fuerza."},{"id":"fortaleza-02","category":"fortaleza","ref":"Salmos 46:1","text":"Dios es nuestro amparo y fortaleza, nuestro pronto auxilio en las tribulaciones.","reflection":"Su ayuda es inmediata, no llega tarde. Cuando lo necesites, llámalo: está más cerca de lo que imaginas."},{"id":"fortaleza-03","category":"fortaleza","ref":"Isaías 40:29","text":"Él da esfuerzo al cansado, y multiplica las fuerzas al que no tiene ningunas.","reflection":"Si hoy ya no te quedan fuerzas, estás exactamente donde Él multiplica las suyas. Dile que estás cansada."},{"id":"fortaleza-04","category":"fortaleza","ref":"2 Corintios 12:9","text":"Y me ha dicho: Bástate mi gracia; porque mi poder se perfecciona en la debilidad. Por tanto, de buena gana me gloriaré más bien en mis debilidades, para que repose sobre mí el poder de Cristo.","reflection":"Tu debilidad no estorba a Dios: le da espacio para actuar. No tienes que fingir fortaleza delante de Él."},{"id":"fortaleza-05","category":"fortaleza","ref":"Éxodo 15:2","text":"Jehová es mi fortaleza y mi cántico, y ha sido mi salvación. Este es mi Dios, y lo alabaré; Dios de mi padre, y lo enalteceré.","reflection":"Él es tu fortaleza y también tu canción. Cuando la fuerza falte, deja que la alabanza te levante."},{"id":"fortaleza-06","category":"fortaleza","ref":"Salmos 28:7","text":"Jehová es mi fortaleza y mi escudo; en él confió mi corazón, y fui ayudado, por lo que se gozó mi corazón, y con mi cántico le alabaré.","reflection":"Quien confía en Dios es ayudada. Y su ayuda deja tras de sí un corazón alegre. Hazlo hoy: confía."},{"id":"fortaleza-07","category":"fortaleza","ref":"Efesios 6:10","text":"Por lo demás, hermanos míos, fortaleceos en el Señor, y en el poder de su fuerza.","reflection":"Tu fuerza no nace de ti misma, sino de Él. Fortalécete en Dios antes de enfrentar lo que viene."},{"id":"fortaleza-08","category":"fortaleza","ref":"Proverbios 31:25","text":"Fuerza y honor son su vestidura; y se ríe de lo por venir.","reflection":"Vístete hoy de fuerza y dignidad. La mujer que confía en Dios puede mirar el futuro con una sonrisa."},{"id":"fortaleza-09","category":"fortaleza","ref":"Habacuc 3:19","text":"Jehová el Señor es mi fortaleza, el cual hace mis pies como de ciervas, y en mis alturas me hace andar.","reflection":"Dios te da pies firmes, como de cierva, para recorrer terrenos difíciles. Te llevará a lugares altos."},{"id":"fe-01","category":"fe","ref":"Hebreos 11:1","text":"Es, pues, la fe la certeza de lo que se espera, la convicción de lo que no se ve.","reflection":"La fe es creer con certeza aun sin ver. Hoy, cree un poco más: lo invisible también es real."},{"id":"fe-02","category":"fe","ref":"Hebreos 11:6","text":"Pero sin fe es imposible agradar a Dios; porque es necesario que el que se acerca a Dios crea que le hay, y que es galardonador de los que le buscan.","reflection":"Dios recompensa a quienes lo buscan con sinceridad. Tu búsqueda, incluso torpe, le alegra."},{"id":"fe-03","category":"fe","ref":"Marcos 11:24","text":"Por tanto, os digo que todo lo que pidiereis orando, creed que lo recibiréis, y os vendrá.","reflection":"Ora con confianza, como una hija que le habla a un Padre bueno. Él escucha cada palabra."},{"id":"fe-04","category":"fe","ref":"Mateo 17:20","text":"Y Jesús les dijo: Por vuestra poca fe; porque de cierto os digo, que si tuviereis fe como un grano de mostaza, diréis a este monte: Pásate de aquí allá, y se pasará; y nada os será imposible.","reflection":"No necesitas una fe enorme, sino una fe genuina, aunque sea del tamaño de una semilla. Dios hace el resto."},{"id":"fe-05","category":"fe","ref":"Romanos 10:17","text":"Así que la fe es por el oír, y el oír, por la palabra de Dios.","reflection":"La fe crece cada vez que abres su Palabra. Este momento de lectura ya es un paso para fortalecerla."},{"id":"fe-06","category":"fe","ref":"Salmos 37:5","text":"Encomienda a Jehová tu camino, y confía en él; y él hará.","reflection":"Entrégale tu camino y deja que Él haga lo que tú no puedes. Tu parte es confiar."},{"id":"fe-07","category":"fe","ref":"Lucas 1:45","text":"Y bienaventurada la que creyó, porque se cumplirán las cosas que le fueron dichas de parte del Señor.","reflection":"María creyó antes de ver, y fue llamada bienaventurada. Lo que Dios te ha dicho se cumplirá."},{"id":"fe-08","category":"fe","ref":"Juan 20:29","text":"Jesús le dijo: Porque me has visto, Tomás, creíste; bienaventurados los que no vieron, y creyeron.","reflection":"Jesús tuvo en mente a quienes creerían sin ver, es decir, a ti. Eres bienaventurada por confiar en Él."},{"id":"fe-09","category":"fe","ref":"Hebreos 10:23","text":"Mantengamos firme, sin fluctuar, la profesión de nuestra esperanza, porque fiel es el que prometió.","reflection":"Mantente firme, no por tu fuerza, sino porque Aquel que prometió es fiel. Su palabra no falla."},{"id":"gratitud-01","category":"gratitud","ref":"1 Tesalonicenses 5:18","text":"Dad gracias en todo, porque esta es la voluntad de Dios para con vosotros en Cristo Jesús.","reflection":"Agradecer no es negar lo difícil, sino notar que, aun ahí, Dios sigue presente. Busca hoy tres motivos para dar gracias."},{"id":"gratitud-02","category":"gratitud","ref":"Salmos 107:1","text":"Alabad a Jehová, porque él es bueno; porque para siempre es su misericordia.","reflection":"Su bondad no es de temporada. Hoy es un buen día para decirle simplemente: gracias, Señor."},{"id":"gratitud-03","category":"gratitud","ref":"Salmos 100:4","text":"Entrad por sus puertas con acción de gracias, por sus atrios con alabanza; alabadle, bendecid su nombre.","reflection":"La gratitud es la puerta de entrada a su presencia. Entra hoy por ella con el corazón abierto."},{"id":"gratitud-04","category":"gratitud","ref":"Colosenses 3:15","text":"Y la paz de Dios gobierne en vuestros corazones, a la cual asimismo fuisteis llamados en un solo cuerpo; y sed agradecidos.","reflection":"Un corazón agradecido tiene más paz. Que tu gratitud sea hoy una forma de dejar que Él gobierne tu interior."},{"id":"gratitud-05","category":"gratitud","ref":"Salmos 103:2","text":"Bendice, alma mía, a Jehová, y no olvides ninguno de sus beneficios.","reflection":"Es fácil olvidar lo recibido. Haz hoy una pequeña lista de sus beneficios y agradécelos uno por uno."},{"id":"gratitud-06","category":"gratitud","ref":"Santiago 1:17","text":"Toda buena dádiva y todo don perfecto desciende de lo alto, del Padre de las luces, en el cual no hay mudanza, ni sombra de variación.","reflection":"Cada cosa buena de tu vida, grande o pequeña, tiene su origen en un Padre que no cambia. Agradécele con cariño."},{"id":"gratitud-07","category":"gratitud","ref":"Salmos 9:1","text":"Te alabaré, oh Jehová, con todo mi corazón; contaré todas tus maravillas.","reflection":"Cuenta sus maravillas, en voz alta o en tu diario. Lo que se cuenta se recuerda y se agradece."},{"id":"gratitud-08","category":"gratitud","ref":"Salmos 92:1","text":"Bueno es alabar a Jehová, y cantar salmos a tu nombre, oh Altísimo;","reflection":"Cantarle a Dios le hace bien al alma. Pon tu canción favorita y agradece con ella."},{"id":"gratitud-09","category":"gratitud","ref":"Filipenses 1:3","text":"Doy gracias a mi Dios siempre que me acuerdo de vosotros,","reflection":"Piensa en alguien que Dios puso en tu camino y dale gracias por esa persona. Quizás hoy puedas decírselo también."},{"id":"paz-01","category":"paz","ref":"Juan 14:27","text":"La paz os dejo, mi paz os doy; yo no os la doy como el mundo la da. No se turbe vuestro corazón, ni tenga miedo.","reflection":"Jesús te deja su propia paz, distinta de la del mundo porque no depende de las circunstancias. Recíbela hoy."},{"id":"paz-02","category":"paz","ref":"Juan 16:33","text":"Estas cosas os he hablado para que en mí tengáis paz. En el mundo tendréis aflicción; pero confiad, yo he vencido al mundo.","reflection":"Habrá días difíciles, pero ya fueron vencidos. Puedes tener paz porque Él tiene la victoria."},{"id":"paz-03","category":"paz","ref":"Números 6:24-26","text":"Jehová te bendiga, y te guarde; Jehová haga resplandecer su rostro sobre ti, y tenga de ti misericordia; Jehová alce sobre ti su rostro, y ponga en ti paz.","reflection":"Recibe esta bendición como un abrazo: Dios te guarda, te sonríe y te da paz. Que sea tuya hoy."},{"id":"paz-04","category":"paz","ref":"Salmos 4:8","text":"En paz me acostaré, y asimismo dormiré; porque solo tú, Jehová, me haces estar confiado.","reflection":"Esta noche puedes descansar. Entrégale tus pendientes antes de dormir; Él vela mientras tú duermes."},{"id":"paz-05","category":"paz","ref":"Salmos 29:11","text":"Jehová dará poder a su pueblo; Jehová bendecirá a su pueblo con paz.","reflection":"Poder y paz van juntos en su mano. Deja que Él te bendiga hoy con ambos."},{"id":"paz-06","category":"paz","ref":"Romanos 5:1","text":"Justificados, pues, por la fe, tenemos paz para con Dios por medio de nuestro Señor Jesucristo;","reflection":"Estás en paz con Dios. Él no está molesto ni distante contigo; Cristo ya lo arregló todo."},{"id":"paz-07","category":"paz","ref":"Salmos 23:2","text":"En lugares de delicados pastos me hará descansar; junto a aguas de reposo me pastoreará.","reflection":"El buen pastor sabe cuándo necesitas descanso y te lleva a aguas tranquilas. Permite que te guíe a ese lugar."},{"id":"paz-08","category":"paz","ref":"Salmos 46:10","text":"Estad quietos, y conoced que yo soy Dios; seré exaltado entre las naciones; enaltecido seré en la tierra.","reflection":"Quédate quieta un minuto. No tienes que controlar nada: Él es Dios, y sigue en el trono."},{"id":"paz-09","category":"paz","ref":"2 Tesalonicenses 3:16","text":"Y el mismo Señor de paz os dé siempre paz en toda manera. El Señor sea con todos vosotros.","reflection":"Pídele paz para todas las áreas de tu vida: la mente, las relaciones y los planes. Él quiere dártela en toda manera."}];
+  var CATS = [{"id":"amor","label":"Amor","emoji":"💖","feeling":"Quiero sentirme amada","tagline":"El amor de Dios te sostiene","hue":"rose"},{"id":"felicidad","label":"Felicidad","emoji":"🌸","feeling":"Estoy feliz","tagline":"Hay gozo en su presencia","hue":"gold"},{"id":"salvacion","label":"Salvación","emoji":"✝️","feeling":"Necesito recordar su gracia","tagline":"Su gracia te alcanzó","hue":"lavender"},{"id":"tristeza","label":"Tristeza","emoji":"🌧️","feeling":"Me siento triste","tagline":"Dios consuela tu corazón","hue":"sky"},{"id":"frustracion","label":"Frustración","emoji":"🌪️","feeling":"Me siento frustrada","tagline":"Sigue, no te rindas","hue":"peach"},{"id":"miedo","label":"Miedo","emoji":"🕊️","feeling":"Tengo miedo","tagline":"Él va contigo","hue":"lavender"},{"id":"ansiedad","label":"Ansiedad","emoji":"🍃","feeling":"Me siento ansiosa","tagline":"Suelta tu carga en Él","hue":"mint"},{"id":"esperanza","label":"Esperanza","emoji":"🌅","feeling":"Necesito esperanza","tagline":"Lo mejor aún viene","hue":"gold"},{"id":"fortaleza","label":"Fortaleza","emoji":"🦋","feeling":"Necesito fuerzas","tagline":"Su poder te basta","hue":"rose"},{"id":"fe","label":"Fe","emoji":"🌱","feeling":"Quiero creer más","tagline":"Confía, Él es fiel","hue":"mint"},{"id":"gratitud","label":"Gratitud","emoji":"🙏","feeling":"Quiero dar gracias","tagline":"Un corazón agradecido","hue":"peach"},{"id":"paz","label":"Paz","emoji":"☁️","feeling":"Busco paz","tagline":"Descansa en su paz","hue":"sky"}];
+  var HUES = { rose: "#e58fb6", gold: "#dcb865", lavender: "#a58ce0", sky: "#7fb6e6", peach: "#f0a98a", mint: "#7fcfae" };
+  var KEY = "cartas-de-dios:web:v1", THEME_KEY = "cartas-de-dios:web:theme";
+  var $ = function (id) { return document.getElementById(id); };
+  var byId = {}; VERSES.forEach(function (v) { byId[v.id] = v; });
+  var catById = {}; CATS.forEach(function (c) { catById[c.id] = c; });
+
+  /* ---------- fechas ---------- */
+  function key(d) { return dateKeyFor(d || new Date()); }
+  function parts(k) { var p = k.split("-").map(Number); return new Date(Date.UTC(p[0], p[1] - 1, p[2])); }
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+  function longDate(k) { return cap(parts(k).toLocaleDateString("es", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })); }
+  var today = key();
+
+  /* ---------- almacenamiento (con respaldo en memoria) ---------- */
+  var store;
+  function load() {
+    try {
+      var p = JSON.parse(localStorage.getItem(KEY) || "null");
+      if (p && p.firstSeen) return { firstSeen: p.firstSeen, extras: p.extras || [], favorites: p.favorites || [], opened: p.opened || [] };
+    } catch (e) {}
+    return { firstSeen: today, extras: [], favorites: [], opened: [] };
+  }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+  store = load();
+  if (store.firstSeen > today) store.firstSeen = today;
+  save();
+
+  /* ---------- datos ---------- */
+  function daily(k) { return getDailyVerse(k, VERSES); }
+  function entries() {
+    var out = [], c = store.firstSeen, guard = 0;
+    while (c <= today && guard++ < 800) {
+      out.push({ k: "d" + c, verse: daily(c), date: c, source: "daily", at: new Date(c + "T06:00:00").getTime() });
+      c = addDays(c, 1);
+    }
+    store.extras.forEach(function (e) {
+      if (byId[e.id]) out.push({ k: e.source + e.at, verse: byId[e.id], date: e.date, source: e.source, at: e.at });
+    });
+    return out.sort(function (a, b) { return b.at - a.at; });
+  }
+  function seenSet() { var s = {}; entries().forEach(function (e) { s[e.verse.id] = 1; }); return s; }
+  function pick(pool, exclude) {
+    var seen = seenSet();
+    var c = pool.filter(function (v) { return !seen[v.id]; });
+    if (!c.length) c = pool.slice();
+    if (c.length > 1 && exclude) c = c.filter(function (v) { return v.id !== exclude; });
+    return c[Math.floor(Math.random() * c.length)];
+  }
+  function record(v, source) { store.extras.push({ id: v.id, date: key(), at: Date.now(), source: source }); store.extras = store.extras.slice(-500); save(); }
+  function isFav(id) { return store.favorites.indexOf(id) >= 0; }
+  function toggleFav(id) {
+    var i = store.favorites.indexOf(id);
+    if (i >= 0) store.favorites.splice(i, 1); else store.favorites.unshift(id);
+    save(); return i < 0;
+  }
+
+  /* ---------- utilidades de interfaz ---------- */
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  var toastTimer;
+  function toast(msg) { var t = $("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.hidden = true; }, 2400); }
+  var ICON = {
+    heart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.2-9.2C1.6 8 3.4 5 6.5 5c2 0 3.6 1.1 5.5 3.2C13.9 6.1 15.5 5 17.5 5c3.1 0 4.900 3 3.700 6.300-1.700 4.600-9.200 9.200-9.200 9.200Z"/></svg>',
+    share: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M5 12v6.500A1.500 1.500 0 0 0 6.500 20h11a1.500 1.500 0 0 0 1.500-1.500V12"/></svg>',
+    shuffle: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h3.500c1.600 0 3 .8 3.900 2.100l3.200 5.800c.9 1.300 2.300 2.100 3.900 2.100H21M3 17h3.500c1.600 0 3-.8 3.900-2.100M13.600 9.100C14.500 7.800 15.900 7 17.500 7H21M18.500 4.500 21 7l-2.500 2.500M18.500 14.500 21 17l-2.500 2.500"/></svg>',
+    smile: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.500 14.500a4.500 4.500 0 0 0 7 0M9 9.500h.01M15 9.500h.01"/></svg>'
+  };
+
+  function letterHTML(v, dateLabel, animate) {
+    var c = catById[v.category], n = v.text.length;
+    var size = n > 230 ? "l" : n > 140 ? "m" : "";
+    return '<article class="letter' + (animate ? " enter" : "") + '">' +
+      '<div class="meta"><time>' + esc(dateLabel) + '</time><span class="chip">' + c.emoji + " " + esc(c.label) + "</span></div>" +
+      '<p class="to">Para ti, amada</p>' +
+      '<blockquote class="' + size + '">“' + esc(v.text) + "”</blockquote>" +
+      '<p class="ref">' + esc(v.ref) + " <small>· RVR1960</small></p>" +
+      '<div class="orn" aria-hidden="true">✦</div>' +
+      "<h3>Para tu corazón</h3><p class=\"refl\">" + esc(v.reflection) + "</p>" +
+      '<p class="sign">Eres amada ♡</p></article>';
+  }
+  function envelopeHTML(title) {
+    return '<div class="env-wrap"><p class="hello">' + esc(title) + "</p>" +
+      '<button class="env-btn" type="button" aria-label="' + esc(title) + '. Toca para abrirla"><div class="floaty"><div class="envelope">' +
+      '<div class="e-back"></div><div class="e-paper" aria-hidden="true"><i></i><i style="width:80%"></i><i style="width:60%"></i></div>' +
+      '<div class="e-front"></div><div class="e-flap"></div><div class="e-seal" aria-hidden="true">♥</div></div></div></button>' +
+      '<p class="env-hint">Toca para abrirla ✨</p></div>';
+  }
+  function shareText(v) { return "“" + v.text + "”\n— " + v.ref + " (RVR1960)\n\n" + v.reflection + "\n\nCartas de Dios 💌"; }
+  function copy(text) {
+    function fallback() {
+      var ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(ta); return ok;
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).then(function () { return true; }, function () { return fallback(); });
+    }
+    return Promise.resolve(fallback());
+  }
+
+  /* Monta sobre → carta con acciones dentro de `host`. */
+  function mount(host, o) {
+    // o: verse, dateLabel, startOpen, envTitle, onOpened, onAnother, anotherLabel
+    function showLetter(animate) {
+      host.innerHTML = letterHTML(o.verse, o.dateLabel, animate) +
+        '<div class="actions">' +
+        '<button class="btn fav" type="button" aria-pressed="' + isFav(o.verse.id) + '" aria-label="Guardar en favoritos">' + ICON.heart + "</button>" +
+        '<button class="btn" type="button" data-a="share">' + ICON.share + "Compartir versículo</button>" +
+        (o.onAnother ? '<button class="btn primary" type="button" data-a="another">' + ICON.shuffle + esc(o.anotherLabel || "Otra palabra") + "</button>" : "") +
+        "</div>";
+      var fav = host.querySelector(".fav");
+      fav.onclick = function () {
+        var now = toggleFav(o.verse.id);
+        fav.setAttribute("aria-pressed", now); fav.setAttribute("aria-label", now ? "Quitar de favoritos" : "Guardar en favoritos");
+        toast(now ? "Guardado en favoritos 💖" : "Quitado de favoritos"); renderLists();
+      };
+      host.querySelector('[data-a="share"]').onclick = function () {
+        copy(shareText(o.verse)).then(function (ok) { toast(ok ? "Versículo copiado, ya puedes pegarlo y enviarlo 📋" : "No se pudo copiar en este dispositivo"); });
+      };
+      var an = host.querySelector('[data-a="another"]'); if (an) an.onclick = o.onAnother;
+    }
+    if (o.startOpen) { showLetter(false); return; }
+    host.innerHTML = envelopeHTML(o.envTitle);
+    var btn = host.querySelector(".env-btn"), opening = false;
+    btn.onclick = function () {
+      if (opening) return; opening = true;
+      host.querySelector(".envelope").classList.add("open");
+      host.querySelector(".floaty").classList.remove("floaty");
+      host.querySelector(".env-hint").style.opacity = "0";
+      setTimeout(function () { showLetter(true); if (o.onOpened) o.onOpened(); }, 1300);
+    };
+  }
+
+  /* ---------- vistas ---------- */
+  function renderHoy() {
+    var host = $("v-hoy"), v = daily(today);
+    host.innerHTML = '<div id="hoy-card"></div>' +
+      '<div class="stack"><button class="btn wide" type="button" id="go-mood">' + ICON.smile + "¿Cómo te sientes hoy?</button>" +
+      '<button class="btn wide" type="button" id="go-random">' + ICON.shuffle + "Versículo al azar</button></div>";
+    mount($("hoy-card"), {
+      verse: v, dateLabel: longDate(today), startOpen: store.opened.indexOf(today) >= 0, envTitle: "Tu carta de hoy",
+      onOpened: function () { if (store.opened.indexOf(today) < 0) { store.opened.push(today); store.opened = store.opened.slice(-400); save(); } renderLists(); }
+    });
+    $("go-mood").onclick = function () { setTab("animo"); };
+    $("go-random").onclick = function () { var r = pick(VERSES); record(r, "random"); openSheet(r, "random"); renderLists(); };
+  }
+  function renderMoods() {
+    $("moods").innerHTML = CATS.map(function (c) {
+      return '<li><button class="mood" type="button" data-c="' + c.id + '" style="--h:' + HUES[c.hue] + '"><span class="em" aria-hidden="true">' + c.emoji + "</span><b>" + esc(c.label) + '</b><span class="f">' + esc(c.feeling) + "</span></button></li>";
+    }).join("");
+    Array.prototype.forEach.call($("moods").querySelectorAll(".mood"), function (b) {
+      b.onclick = function () {
+        var cat = b.getAttribute("data-c");
+        var v = pick(VERSES.filter(function (x) { return x.category === cat; }));
+        record(v, "mood"); openSheet(v, "mood"); renderLists();
+      };
+    });
+  }
+  var SRC = { daily: "Carta del día", mood: "Según cómo me sentía", random: "Al azar" };
+  function rowHTML(v, src, id) {
+    var c = catById[v.category];
+    return '<li><button class="row" type="button" data-id="' + esc(id) + '"><div class="tags"><span class="chip">' + c.emoji + " " + esc(c.label) + "</span>" + (src ? "<span>" + SRC[src] + "</span>" : "") + "</div><p>“" + esc(v.text) + '”</p><div class="r">' + esc(v.ref) + "</div></button></li>";
+  }
+  function renderLists() {
+    var fav = store.favorites.map(function (id) { return byId[id]; }).filter(Boolean);
+    $("fav-list").innerHTML = fav.length
+      ? '<ul class="list">' + fav.map(function (v) { return rowHTML(v, null, v.id); }).join("") + "</ul>"
+      : '<div class="empty"><div aria-hidden="true" style="font-size:2rem">🤍</div>Todavía no tienes favoritos. Toca el corazón en una carta para guardarla aquí.</div>';
+    Array.prototype.forEach.call($("fav-list").querySelectorAll(".row"), function (b) {
+      b.onclick = function () { openSheet(byId[b.getAttribute("data-id")], "view", catById[byId[b.getAttribute("data-id")].category].label); };
+    });
+    var list = entries(), html = "", lastDate = "";
+    list.slice(0, 120).forEach(function (e) {
+      if (e.date !== lastDate) { if (lastDate) html += "</ul>"; html += '<h3 class="day">' + longDate(e.date) + '</h3><ul class="list">'; lastDate = e.date; }
+      html += rowHTML(e.verse, e.source, e.verse.id + "|" + e.date);
+    });
+    if (lastDate) html += "</ul>";
+    $("hist-list").innerHTML = html || '<div class="empty">Aún no hay cartas.</div>';
+    Array.prototype.forEach.call($("hist-list").querySelectorAll(".row"), function (b) {
+      var p = b.getAttribute("data-id").split("|");
+      b.onclick = function () { openSheet(byId[p[0]], "view", longDate(p[1])); };
+    });
+  }
+
+  /* ---------- hoja modal ---------- */
+  var sheetOpen = false;
+  function openSheet(v, mode, label) {
+    sheetOpen = true; $("sheet-bg").hidden = false;
+    function show(verse, md) {
+      mount($("sheet-body"), {
+        verse: verse, dateLabel: label || longDate(today), startOpen: md === "view",
+        envTitle: md === "mood" ? "Una carta para ti" : "Una sorpresa para ti",
+        onAnother: md === "view" ? null : function () {
+          var next = md === "mood"
+            ? pick(VERSES.filter(function (x) { return x.category === verse.category; }), verse.id)
+            : pick(VERSES, verse.id);
+          record(next, md); renderLists(); show(next, md);
+        },
+        anotherLabel: md === "mood" ? "Otra palabra para hoy" : "Otro versículo"
+      });
+    }
+    show(v, mode);
+    $("sheet-close").focus();
+  }
+  function closeSheet() { sheetOpen = false; $("sheet-bg").hidden = true; $("sheet-body").innerHTML = ""; }
+  $("sheet-close").onclick = closeSheet;
+  $("sheet-bg").onclick = function (e) { if (e.target === $("sheet-bg")) closeSheet(); };
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && sheetOpen) closeSheet(); });
+
+  /* ---------- pestañas ---------- */
+  var TABS = ["hoy", "animo", "fav", "hist"];
+  function setTab(t) {
+    TABS.forEach(function (n) { $("v-" + n).hidden = n !== t; });
+    Array.prototype.forEach.call(document.querySelectorAll("nav.bottom button"), function (b) {
+      if (b.getAttribute("data-tab") === t) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
+    });
+    if (location.hash !== "#" + t) { try { history.replaceState(null, "", "#" + t); } catch (e) { location.hash = t; } }
+    window.scrollTo(0, 0);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("nav.bottom button"), function (b) { b.onclick = function () { setTab(b.getAttribute("data-tab")); }; });
+  window.addEventListener("hashchange", function () { var h = location.hash.slice(1); if (TABS.indexOf(h) >= 0) setTab(h); });
+
+  /* ---------- tema ---------- */
+  try { var t = localStorage.getItem(THEME_KEY); if (t) document.documentElement.setAttribute("data-theme", t); } catch (e) {}
+  $("theme").onclick = function () {
+    var cur = document.documentElement.getAttribute("data-theme");
+    var dark = cur ? cur === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var next = dark ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+  };
+
+  /* ---------- cambio de día con la página abierta ---------- */
+  function checkDay() { var k = key(); if (k !== today) { today = k; $("today").textContent = longDate(today); renderHoy(); renderLists(); } }
+  document.addEventListener("visibilitychange", checkDay); setInterval(checkDay, 60000);
+
+  /* ---------- arranque ---------- */
+  $("today").textContent = longDate(today);
+  renderHoy(); renderMoods(); renderLists();
+  var start = location.hash.slice(1); setTab(TABS.indexOf(start) >= 0 ? start : "hoy");
+})();
+</script>
+</body>
+</html>
